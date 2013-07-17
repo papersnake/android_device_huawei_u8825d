@@ -111,7 +111,7 @@ TARGET_PREBUILT_KERNEL := device/huawei/u8825d/kernel
 BOARD_KERNEL_CMDLINE := androidboot.hardware=huawei loglevel=1
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_PAGE_SIZE := 2048
-BOARD_MKBOOTIMG_ARGS := 0x01508000
+#BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01508000
 
 BOARD_USE_USB_MASS_STORAGE_SWITCH := true
 TARGET_USE_CUSTOM_SECOND_LUN_NUM := 1
@@ -122,7 +122,26 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/class/android_usb/android0/f_mass_stora
 # Recovery
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_PREBUILT_RECOVERY_KERNEL := device/huawei/u8825d/recovery_kernel
-BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/huawei/u8825d/recovery/recovery-keys.c
-TARGET_RECOVERY_INITRC := device/huawei/u8825d/recovery/etc/init.rc
+DEVICE_RESOLUTION := 480x800
+BOARD_USES_MMCUTILS := true
+BOARD_HAS_LARGE_FILESYSTEM := true
+BOARD_HAS_NO_MISC_PARTITION := true
+BOARD_USE_CUSTOM_RECOVERY_FONT:= \"roboto_10x18.h\"
+#BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/huawei/u8825d/recovery/recovery-keys.c
+#BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/huawei/u8825d/recovery/recovery_ui.c
+TW_INTERNAL_STORAGE_PATH := "/sdcard"
+TW_INTERNAL_STORAGE_MOUNT_POINT := "sdcard"
+TW_EXTERNAL_STORAGE_PATH := "/external_sd"
+TW_EXTERNAL_STORAGE_MOUNT_POINT := "external_sd"
+RECOVERY_GRAPHICS_USE_LINELENGTH := true
+TW_NO_REBOOT_BOOTLOADER := true
+#BOARD_CUSTOM_GRAPHICS := ../../../device/huawei/u8825d/recovery/graphics.c
+#TARGET_RECOVERY_INITRC := device/huawei/u8825d/recovery/etc/init.rc
+
+# CN
+#TW_BOARD_CUSTOM_GRAPHICS := ../../../device/huawei/c8813/recovery/graphics_cn.c
+# EN
+TW_BOARD_CUSTOM_GRAPHICS := ../../../device/huawei/u8825d/recovery/graphics.c
+TARGET_RECOVERY_INITRC := device/huawei/u8825d/recovery/recovery.rc
 BOARD_UMS_LUNFILE := /sys/class/android_usb/android0/f_mass_storage/lun%d/file
 

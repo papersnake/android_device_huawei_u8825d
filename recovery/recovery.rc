@@ -1,8 +1,11 @@
+import /init.recovery.${ro.hardware}.rc
+
 on early-init
     start ueventd
 
 on init
     export PATH /sbin
+    export LD_LIBRARY_PATH .:/sbin
     export ANDROID_ROOT /system
     export ANDROID_DATA /data
     export EXTERNAL_STORAGE /sdcard
@@ -10,7 +13,6 @@ on init
     symlink /system/etc /etc
 
     mkdir /boot
-    mkdir /cust
     mkdir /recovery
     mkdir /sdcard
     mkdir /internal_sd
@@ -29,9 +31,10 @@ on init
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor 12d1
     write /sys/class/android_usb/android0/idProduct 1038
+    write /sys/class/android_usb/android0/functions mass_storage,adb 
+    write /sys/class/android_usb/android0/iManufacturer ${ro.product.manufacturer}
     write /sys/class/android_usb/android0/f_mass_storage/nluns 2
     write /sys/class/android_usb/android0/f_mass_storage/cdrom_index none
-    write /sys/class/android_usb/android0/functions mass_storage,adb
 
 on boot
 
@@ -41,12 +44,19 @@ on boot
 
     class_start default
 
+service offmode_check /sbin/offmode_check
+    oneshot
+	
+service rmt_storage /sbin/rmt_storage
+	
 service ueventd /sbin/ueventd
     critical
+	
+service offmode_charge /sbin/offmode_charge
+    disabled
 
 service recovery /sbin/recovery
-
-service rmt_storage /sbin/rmt_storage
+    disabled
 
 service adbd /sbin/adbd recovery
     disabled
@@ -55,10 +65,9 @@ service rmt_oeminfo /sbin/rmt_oeminfo
     class main
     user root
     oneshot
-
-on property:ro.boot.emmc=true
-    start rmt_oeminfo
-    start rmt_storage
+on property:init.svc.charge=stopped
+    start recovery
+    write /sys/devices/platform/pmic-leds/leds/button-backlight/brightness 25
 
 # Always start adbd on userdebug and eng builds
 on property:ro.debuggable=1

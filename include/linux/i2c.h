@@ -29,11 +29,19 @@
 #include <linux/types.h>
 #ifdef __KERNEL__
 #include <linux/module.h>
+#include <linux/i2c-id.h>
 #include <linux/mod_devicetable.h>
 #include <linux/device.h>	/* for struct device */
 #include <linux/sched.h>	/* for completion */
 #include <linux/mutex.h>
 #include <linux/of.h>		/* for struct device_node */
+
+/* --- For i2c-isa ---------------------------------------------------- */
+
+extern void i2c_adapter_dev_release(struct device *dev);
+extern struct device_driver i2c_adapter_driver;
+extern struct class i2c_adapter_class;
+extern struct bus_type i2c_bus_type;
 
 extern struct bus_type i2c_bus_type;
 extern struct device_type i2c_adapter_type;
